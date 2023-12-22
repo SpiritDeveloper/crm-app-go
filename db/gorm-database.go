@@ -6,7 +6,7 @@ import (
 	. "crm-app-go/model"
 	"log"
 	"sync"
-	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
 type gormDatabase struct {
@@ -19,16 +19,19 @@ func NewGormDatabase() IDatabaseEngine {
 }
 
 func InitDatabase(g *gormDatabase, config *config.Database) {
-	url := config.User + ":" + config.Password + "@tcp(" + config.Server + ":" +
-		config.Port + ")/" + config.Name + "?charset=utf8mb4&parseTime=True&loc=Local"
-
-	db, err := gorm.Open(config.Engine, url)
+	dsn := url.URL{
+        User:     url.UserPassword(config.User, config.Password),
+        Scheme:   config.Name,
+        Host:     fmt.Sprintf("%s:%d", config.Server, config.Port),
+        RawQuery: (&url.Values{"sslmode": []string{"disable"}}).Encode(),
+    }
+    db, err := gorm.Open(config.Engine, dsn.String())
 	if err != nil {
 		log.Println("Database connection failed : ", err)
 	}else {
 		log.Println("Database connection established!")
 	}
-	log.Println("MySql connection running on port 3306")
+	log.Println("POSTGRES connection running on port 5432")
 	g.client = db
 }
 
