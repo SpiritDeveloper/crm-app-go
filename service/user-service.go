@@ -1,8 +1,8 @@
 package service
 
 import (
-	"crm-app-go/repository"
 	. "crm-app-go/model"
+	"crm-app-go/repository"
 )
 
 type IUserService interface{

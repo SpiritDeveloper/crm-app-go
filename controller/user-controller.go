@@ -1,14 +1,15 @@
 package controller
 
 import (
-	"database/sql"
-	"encoding/json"
 	. "crm-app-go/model"
 	"crm-app-go/service"
-	"github.com/gorilla/mux"
+	"database/sql"
+	"encoding/json"
 	"log"
 	"net/http"
 	"strconv"
+
+	"github.com/gorilla/mux"
 )
 
 type IUserController interface {

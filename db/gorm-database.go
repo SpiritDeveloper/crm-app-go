@@ -2,10 +2,13 @@ package db
 
 import (
 	"crm-app-go/config"
-	"github.com/jinzhu/gorm"
 	. "crm-app-go/model"
+	"fmt"
 	"log"
+	"net/url"
 	"sync"
+
+	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
@@ -22,7 +25,7 @@ func InitDatabase(g *gormDatabase, config *config.Database) {
 	dsn := url.URL{
         User:     url.UserPassword(config.User, config.Password),
         Scheme:   config.Name,
-        Host:     fmt.Sprintf("%s:%d", config.Server, config.Port),
+        Host:     fmt.Sprintf("%s:%s", string(config.Server), string(config.Port)),
         RawQuery: (&url.Values{"sslmode": []string{"disable"}}).Encode(),
     }
     db, err := gorm.Open(config.Engine, dsn.String())
