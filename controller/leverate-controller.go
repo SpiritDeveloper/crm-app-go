@@ -32,10 +32,9 @@ func (leverateController *leverateController) SendLeadToCrm(w http.ResponseWrite
 	}
 	defer r.Body.Close()
 
-	println("asdasd")
 	res, err := leverateService.SendLeadToCrm(&newCustomer)
 	if err != nil {
-		respondWithError(w, http.StatusInternalServerError, err.Error())
+		respondWithError(w, http.StatusInternalServerError, "")
 		return
 	}
 
