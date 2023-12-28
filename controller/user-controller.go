@@ -20,7 +20,7 @@ type IUserController interface {
 	DeleteUser(w http.ResponseWriter, r *http.Request)
 }
 
-type userController struct {}
+type userController struct{}
 
 var (
 	userService service.IUserService
@@ -70,7 +70,7 @@ func (userController *userController) PostUser(w http.ResponseWriter, r *http.Re
 	defer r.Body.Close()
 	res, err := userService.PostUserService(&user)
 	if err != nil {
-		log.Printf("Not able to post User : %s" , err)
+		log.Printf("Not able to post User : %s", err)
 		respondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
@@ -122,5 +122,5 @@ func (userController *userController) DeleteUser(w http.ResponseWriter, r *http.
 		}
 		return
 	}
-	respondWithJSON(w, http.StatusOK, map[string]string{"result" : "success"})
+	respondWithJSON(w, http.StatusOK, map[string]string{"result": "success"})
 }

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	config "crm-app-go/config"
 	"crm-app-go/controller"
 	"crm-app-go/db"
@@ -9,24 +8,28 @@ import (
 	router "crm-app-go/http"
 	"crm-app-go/repository"
 	"crm-app-go/service"
-	"github.com/jinzhu/gorm"
+	"encoding/json"
 	"log"
 	"os"
+
+	"github.com/jinzhu/gorm"
 )
 
 var (
-	c 		   config.Config
+	c          config.Config
 	httpRouter router.IRouter
 	gormDb     db.IDatabaseEngine
 	gDb        *gorm.DB
 )
 
-
 // User
 var (
-	userRepository 	repository.IUserRepository
-	userService		service.IUserService
-	userController	controller.IUserController
+	userRepository repository.IUserRepository
+	userService    service.IUserService
+	userController controller.IUserController
+
+	leverateService    service.ILeverateService
+	leverateController controller.ILeverateController
 )
 
 func main() {
@@ -37,6 +40,7 @@ func main() {
 	gDb = gormDb.GetDatabase(c.Database)
 	gormDb.RunMigration()
 	initUserServiceContainer()
+	initLeverateServiceContainer()
 	httpRouter.SERVE(c.App.Port)
 }
 
@@ -54,7 +58,6 @@ func initConfig() {
 	}
 }
 
-
 func initUserServiceContainer() {
 	userRepository = repository.NewUserRepository(gDb)
 	userService = service.NewUserService(userRepository)
@@ -67,3 +70,9 @@ func initUserServiceContainer() {
 	httpRouter.DELETE("/user/{id}", userController.DeleteUser)
 }
 
+func initLeverateServiceContainer() {
+	leverateService = service.NewLeverateService()
+	leverateController = controller.NewLeverateController(leverateService)
+
+	httpRouter.POST("/create-in-crm", leverateController.SendLeadToCrm)
+}
