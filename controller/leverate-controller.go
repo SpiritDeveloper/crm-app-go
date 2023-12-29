@@ -34,7 +34,7 @@ func (leverateController *leverateController) SendLeadToCrm(w http.ResponseWrite
 
 	res, err := leverateService.SendLeadToCrm(&newCustomer)
 	if err != nil {
-		respondWithError(w, http.StatusInternalServerError, "")
+		respondWithJSON(w, http.StatusOK, err)
 		return
 	}
 

@@ -1,11 +1,12 @@
 package repository
 
 import (
-	"github.com/jinzhu/gorm"
 	. "crm-app-go/model"
+
+	"github.com/jinzhu/gorm"
 )
 
-type IUserRepository interface{
+type IUserRepository interface {
 	GetUserById(id int) (*User, error)
 	GetAllUsers() (*[]User, error)
 	CreateUser(user *User) (*User, error)
@@ -23,7 +24,7 @@ func NewUserRepository(db *gorm.DB) IUserRepository {
 
 func (userRepository *userRepository) GetUserById(id int) (*User, error) {
 	var user User
-	result := userRepository.DB.First(&user,id)
+	result := userRepository.DB.First(&user, id)
 	return &user, result.Error
 }
 

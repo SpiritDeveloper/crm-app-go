@@ -30,6 +30,8 @@ var (
 
 	leverateService    service.ILeverateService
 	leverateController controller.ILeverateController
+
+	logRepository repository.ILogRepository
 )
 
 func main() {
@@ -71,7 +73,8 @@ func initUserServiceContainer() {
 }
 
 func initLeverateServiceContainer() {
-	leverateService = service.NewLeverateService()
+	logRepository = repository.NewLogRepository(gDb)
+	leverateService = service.NewLeverateService(logRepository)
 	leverateController = controller.NewLeverateController(leverateService)
 
 	httpRouter.POST("/create-in-crm", leverateController.SendLeadToCrm)

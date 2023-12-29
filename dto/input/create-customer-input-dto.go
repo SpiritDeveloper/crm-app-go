@@ -1,10 +1,10 @@
 package input
 
 type NewCustomerDto struct {
-	BussinesUnitId   int    `json:"bussinesUnitId"`
-	BussinesUnitName string `json:"bussinesUnitName"`
-	IsoCurrency      string `json:"isoCurrency"`
-	FirstName        string `json:"firstName"`
-	LastName         string `json:"lastName"`
-	Email            string `json:"email"`
+	BussinesUnitId   int    `json:"bussinesUnitId" validate:"required"`
+	BussinesUnitName string `json:"bussinesUnitName" validate:"required"`
+	IsoCurrency      string `json:"isoCurrency" validate:"required"`
+	FirstName        string `json:"firstName" validate:"required"`
+	LastName         string `json:"lastName" validate:"required"`
+	Email            string `json:"email" validate:"required"`
 }
