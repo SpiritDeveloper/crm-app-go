@@ -1,10 +1,13 @@
 package http
 
 import (
-	"github.com/gorilla/mux"
 	"log"
 	"net/http"
 	"sync"
+
+	"github.com/gorilla/handlers"
+
+	"github.com/gorilla/mux"
 )
 
 type muxRouter struct {
@@ -48,6 +51,9 @@ func (r *muxRouter) DELETE(uri string, f func(w http.ResponseWriter, r *http.Req
 }
 
 func (r *muxRouter) SERVE(port string) {
+	headers := handlers.AllowedHeaders([]string{"*"})
+    methods := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS"})
+    origins := handlers.AllowedOrigins([]string{"*"})
 	log.Printf("Mux HTTP server running on port %v", port)
-	http.ListenAndServe(":" + port, r.client)
+	log.Fatal(http.ListenAndServe(":" + port, handlers.CORS(origins, headers, methods)(r.client)))
 }

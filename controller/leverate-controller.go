@@ -23,7 +23,6 @@ func NewLeverateController(service service.ILeverateService) ILeverateController
 }
 
 func (leverateController *leverateController) SendLeadToCrm(w http.ResponseWriter, r *http.Request) {
-
 	var newCustomer NewCustomerDto
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&newCustomer); err != nil {

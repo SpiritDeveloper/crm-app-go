@@ -99,7 +99,7 @@ func (leverateService *leverateService) SendLeadToCrm(customer *NewCustomerDto) 
 		newLog := &model.Log{
 			Action:   "CREATE LEAD",
 			Body:     string(jsonData),
-			Response: string(response.body),
+			Response: "",//string(response.Body),
 			Success:  false,
 		}
 		logRepository.CreateLog(newLog)
