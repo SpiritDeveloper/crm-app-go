@@ -54,8 +54,9 @@ func (g *gormDatabase) RunMigration() {
 		panic("Initialise gorm db before running migrations")
 	}
 	// g.client.AutoMigrate(&User{})
+
 	g.client.AutoMigrate(&Lead{})
 	g.client.AutoMigrate(&Token{})
-
+	g.client.AutoMigrate(&Log{})
 	//We need to add foreign keys manually.
 }
