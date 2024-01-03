@@ -71,7 +71,7 @@ func (leverateService *leverateService) SendLeadToCrm(customer *NewCustomerDto) 
 		}
 	}
 
-	url := "https://0373-148-244-126-218.ngrok-free.app/test"
+	url := "https://8abe-2806-2f0-a2c1-fdc1-c567-c927-b953-5086.ngrok-free.app/test"
 
 	contentType := "application/json"
 
@@ -117,7 +117,6 @@ func (leverateService *leverateService) SendLeadToCrm(customer *NewCustomerDto) 
 	}
 
 	var apiResponse leverateCreateCustomerResponse
-
 	err = json.Unmarshal(body, &apiResponse)
 	if err != nil {
 		return nil, &ErrorNewCustomerDto{
@@ -125,6 +124,15 @@ func (leverateService *leverateService) SendLeadToCrm(customer *NewCustomerDto) 
 			Message: "Customer already exist in crm",
 		}
 	}
+
+	jsonResponse, err := json.Marshal(apiResponse)
+	newLog := &model.Log{
+		Action:   "CREATE LEAD",
+		Body:     string(jsonData),
+		Response: string(jsonResponse),
+		Success:  true,
+	}
+	logRepository.CreateLog(newLog)
 
 	return &ResponseNewCustomerDto{
 		Tpid:    apiResponse.AccountId,

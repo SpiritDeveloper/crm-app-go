@@ -56,6 +56,6 @@ func (g *gormDatabase) RunMigration() {
 	// g.client.AutoMigrate(&User{})
 	g.client.AutoMigrate(&LeadFlayway{})
 	g.client.AutoMigrate(&Token{})
-
+	g.client.AutoMigrate(&Log{})
 	//We need to add foreign keys manually.
 }
