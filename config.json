@@ -1,13 +1,13 @@
 {
   "app" : {
-    "port": "3000"
+    "port": "3002"
   },
   "database":{
     "engine": "postgres",
     "server": "localhost",
     "port": "5432",
     "user": "postgres",
-    "password": "numero104",
+    "password": "password",
     "name" : "postgres"
   }
 }

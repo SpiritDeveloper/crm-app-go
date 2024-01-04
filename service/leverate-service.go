@@ -24,11 +24,13 @@ type ILeverateService interface {
 type leverateService struct{}
 
 var (
-	logRepository repository.ILogRepository
+	logRepository           repository.ILogRepository
+	configurationRepository repository.IConfigurationRepository
 )
 
-func NewLeverateService(repository repository.ILogRepository) ILeverateService {
-	logRepository = repository
+func NewLeverateService(LogRepository repository.ILogRepository, ConfigurationRepository repository.IConfigurationRepository) ILeverateService {
+	logRepository = LogRepository
+	configurationRepository = ConfigurationRepository
 	return &leverateService{}
 }
 
@@ -50,13 +52,9 @@ func (leverateService *leverateService) SendLeadToCrm(customer *NewCustomerDto) 
 	}
 
 	jsonData, err := json.Marshal(payload)
-	if err != nil {
-		panic(err)
-	}
 
 	if err := validate.Struct(customer); err != nil {
 		fmt.Println("Validation error:", err)
-
 		newLog := &model.Log{
 			Action:   "CREATE LEAD",
 			Body:     string(jsonData),
@@ -71,7 +69,25 @@ func (leverateService *leverateService) SendLeadToCrm(customer *NewCustomerDto) 
 		}
 	}
 
-	url := "https://8abe-2806-2f0-a2c1-fdc1-c567-c927-b953-5086.ngrok-free.app/test"
+	configuration := configurationRepository.GetConfigurationByBrandId(customer.BussinesUnitId)
+	fmt.Println(configuration.BusinessUnitName)
+
+	if configuration == nil {
+		newLog := &model.Log{
+			Action:   "CREATE LEAD",
+			Body:     string(jsonData),
+			Response: `{"status": false, "message": "Bussines Unit not found"}`,
+			Success:  false,
+		}
+		logRepository.CreateLog(newLog)
+
+		return nil, &ErrorNewCustomerDto{
+			Status:  false,
+			Message: "Validation error: Bussines Unit not found",
+		}
+	}
+
+	url := "https://8ee7-148-244-126-218.ngrok-free.app/test"
 
 	contentType := "application/json"
 
