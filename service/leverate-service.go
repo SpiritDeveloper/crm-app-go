@@ -19,6 +19,7 @@ var validate = validator.New()
 
 type ILeverateService interface {
 	SendLeadToCrm(customer *NewCustomerDto) (*ResponseNewCustomerDto, *ErrorNewCustomerDto)
+	GenerateToken(url string, user string, password string) (*LeverateGenerateTokenResponse, error)
 }
 
 type leverateService struct{}
@@ -34,84 +35,163 @@ func NewLeverateService(LogRepository repository.ILogRepository, ConfigurationRe
 	return &leverateService{}
 }
 
-type leverateCreateCustomerResponse struct {
-	AccountId         string `json:"accountId"`
-	TpAccountName     string `json:"tpAccountName"`
-	TpAccountPassword string `json:"tpAccountPassword"`
+func (leverateService *leverateService) GenerateToken(url string, user string, password string) (*LeverateGenerateTokenResponse, error) {
+	url_leverate := "" + url + "/token"
+
+	payload := GenerateTokenDto{
+		Username: user,
+		Password: password,
+	}
+
+	jsonData, _ := json.Marshal(payload)
+	req, _ := http.NewRequest("POST", url_leverate, bytes.NewBuffer(jsonData))
+
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("Accept", "application/json")
+
+	response, err := http.DefaultClient.Do(req)
+
+	if err != nil {
+		return nil, err
+	}
+
+	defer response.Body.Close()
+	if response.StatusCode != http.StatusOK {
+		return nil, err
+	}
+
+	body, err := io.ReadAll(response.Body)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var apiResponse LeverateGenerateTokenResponse
+	err = json.Unmarshal(body, &apiResponse)
+	if err != nil {
+		return nil, err
+	}
+
+	return &LeverateGenerateTokenResponse{
+		Token:     apiResponse.Token,
+		ExpiresIn: apiResponse.ExpiresIn,
+	}, nil
 }
 
 func (leverateService *leverateService) SendLeadToCrm(customer *NewCustomerDto) (*ResponseNewCustomerDto, *ErrorNewCustomerDto) {
 
-	payload := NewCustomerDto{
-		BussinesUnitId:   customer.BussinesUnitId,
-		IsoCurrency:      customer.IsoCurrency,
-		BussinesUnitName: customer.BussinesUnitName,
-		FirstName:        customer.FirstName,
-		LastName:         customer.LastName,
-		Email:            customer.Email,
-	}
+	jsonBody, _ := json.Marshal(customer)
 
-	jsonData, err := json.Marshal(payload)
+	configuration, err := configurationRepository.GetConfigurationByBrandId(customer.BussinesUnitId)
+	fmt.Println(configuration.BuOwnerId)
+	if err != nil {
 
-	if err := validate.Struct(customer); err != nil {
-		fmt.Println("Validation error:", err)
+		message := "DB error: " + err.Error()
+
 		newLog := &model.Log{
 			Action:   "CREATE LEAD",
-			Body:     string(jsonData),
-			Response: `{"status": false, "message": "Error Body"}`,
+			Body:     string(jsonBody),
+			Response: `{"status": false, "message":` + message + `}`,
 			Success:  false,
 		}
 		logRepository.CreateLog(newLog)
 
 		return nil, &ErrorNewCustomerDto{
 			Status:  false,
-			Message: "Validation error: " + err.Error(),
+			Message: message,
 		}
 	}
 
-	configuration := configurationRepository.GetConfigurationByBrandId(customer.BussinesUnitId)
-	fmt.Println(configuration.BusinessUnitName)
-
-	if configuration == nil {
-		newLog := &model.Log{
-			Action:   "CREATE LEAD",
-			Body:     string(jsonData),
-			Response: `{"status": false, "message": "Bussines Unit not found"}`,
-			Success:  false,
-		}
-		logRepository.CreateLog(newLog)
-
-		return nil, &ErrorNewCustomerDto{
-			Status:  false,
-			Message: "Validation error: Bussines Unit not found",
-		}
-	}
-
-	url := "https://8ee7-148-244-126-218.ngrok-free.app/test"
-
-	contentType := "application/json"
-
-	response, err := http.Post(url, contentType, bytes.NewBuffer(jsonData))
+	token, err := leverateService.GenerateToken(configuration.Url, configuration.User, configuration.Password)
 
 	if err != nil {
+
+		message := "Token error: " + err.Error()
+
+		newLog := &model.Log{
+			Action:   "CREATE LEAD",
+			Body:     string(jsonBody),
+			Response: `{"status": false, "message":` + message + `}`,
+			Success:  false,
+		}
+		logRepository.CreateLog(newLog)
+
+		return nil, &ErrorNewCustomerDto{
+			Status:  false,
+			Message: message,
+		}
+	}
+
+	payload := SendCustomerLeverate{
+		TradingPlatformId: configuration.TradingPlatformId,
+		IsoCurrency:       customer.IsoCurrency,
+		FirstName:         customer.FirstName,
+		LastName:          customer.LastName,
+		Email:             customer.Email,
+		Phone:             customer.Phone,
+		Password:          customer.Password,
+		IsoCountry:        customer.IsoCountry,
+		SubAffiliate:      customer.SubAffiliate,
+		RegistrationUrl:   customer.RegistrationUrl,
+		Language:          "es",
+		CampaignId:        customer.CampaignId,
+		Tag:               customer.Tag,
+		Tag1:              customer.Tag1,
+		AdditionalInfo1:   customer.AdditionalInfo1,
+		AdditionalInfo2:   customer.AdditionalInfo2,
+		AdditionalInfo3:   customer.AdditionalInfo3,
+		BuOwnerId:         configuration.BuOwnerId,
+	}
+
+	jsonData, _ := json.Marshal(payload)
+
+	url := "" + configuration.Url + "/accounts/real"
+
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonData))
+
+	if err != nil {
+		message := "Error request +" + err.Error()
+
 		newLog := &model.Log{
 			Action:   "CREATE LEAD",
 			Body:     string(jsonData),
-			Response: `{"status": false, "message": "Error request"}`,
+			Response: `{"status": false, "message":` + message + `}`,
 			Success:  false,
 		}
 		logRepository.CreateLog(newLog)
 		return nil, &ErrorNewCustomerDto{
 			Status:  false,
-			Message: "Error to create customer in leverate",
+			Message: message,
+		}
+	}
+
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("Authorization", "Bearer "+token.Token)
+	req.Header.Add("Accept", "application/json")
+	req.Header.Add("Api-Version", "3")
+
+	response, err := http.DefaultClient.Do(req)
+
+	if err != nil {
+
+		message := "Error request " + err.Error()
+
+		newLog := &model.Log{
+			Action:   "CREATE LEAD",
+			Body:     string(jsonData),
+			Response: `{"status": false, "message":` + message + `}`,
+			Success:  false,
+		}
+		logRepository.CreateLog(newLog)
+		return nil, &ErrorNewCustomerDto{
+			Status:  false,
+			Message: message,
 		}
 	}
 
 	defer response.Body.Close()
-
 	body, err := io.ReadAll(response.Body)
 	if err != nil {
-
 		newLog := &model.Log{
 			Action:   "CREATE LEAD",
 			Body:     string(jsonData),
@@ -128,11 +208,11 @@ func (leverateService *leverateService) SendLeadToCrm(customer *NewCustomerDto) 
 	if response.StatusCode != http.StatusOK {
 		return nil, &ErrorNewCustomerDto{
 			Status:  false,
-			Message: "Customer already exist in crm",
+			Message: string(body),
 		}
 	}
 
-	var apiResponse leverateCreateCustomerResponse
+	var apiResponse LeverateCreateCustomerResponse
 	err = json.Unmarshal(body, &apiResponse)
 	if err != nil {
 		return nil, &ErrorNewCustomerDto{
@@ -151,7 +231,7 @@ func (leverateService *leverateService) SendLeadToCrm(customer *NewCustomerDto) 
 	logRepository.CreateLog(newLog)
 
 	return &ResponseNewCustomerDto{
-		Tpid:    apiResponse.AccountId,
+		Tpid:    apiResponse.TpAccountName,
 		Message: "Customer create successfully",
 	}, nil
 

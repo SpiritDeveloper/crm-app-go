@@ -19,7 +19,7 @@ func NewConfigurationRepository(db *gorm.DB) IConfigurationRepository {
 }
 
 func (configurationRepository *configurationRepository) GetConfigurationByBrandId(BusinessUnitId string) (*Configuration, error) {
-	var configuration Configuration
-	result := configurationRepository.DB.Where("business_unit_id = ?", BusinessUnitId).First(*&configuration)
-	return &configuration, result.Error
+	var config Configuration
+	result := configurationRepository.DB.Where("business_unit_id = ?", BusinessUnitId).First(&config)
+	return &config, result.Error
 }
