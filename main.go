@@ -27,12 +27,22 @@ var (
 	userRepository repository.IUserRepository
 	userService    service.IUserService
 	userController controller.IUserController
+)
 
+// Leverate
+var (
 	leverateService    service.ILeverateService
 	leverateController controller.ILeverateController
 
 	logRepository           repository.ILogRepository
 	configurationRepository repository.IConfigurationRepository
+)
+
+//Flyway 
+var (
+	flywayService    service.ILeverateService
+	flywayController controller.ILeverateController
+	flywayRepository repository.ILogRepository
 )
 
 func main() {
@@ -72,6 +82,16 @@ func initUserServiceContainer() {
 	httpRouter.PUT("/user/{id}", userController.PutUser)
 	httpRouter.DELETE("/user/{id}", userController.DeleteUser)
 }
+
+func initFlaywayServiceCointainer() {
+	flywayRepository = repository.NewLogRepository(gDb)
+	flywayService = service.NewLeverateService(logRepository)
+	flywayController = controller.NewLeverateController(leverateService)
+
+	httpRouter.POST("/flyway/register-user-crm", userController.PostUser)
+	httpRouter.POST("/flyway/create-transaction", userController.PostUser)
+}
+
 
 func initLeverateServiceContainer() {
 	logRepository = repository.NewLogRepository(gDb)

@@ -16,6 +16,63 @@ definitions:
                 x-go-name: Error
         type: object
         x-go-package: crm-app-go/docs
+    FlywayRequestBody:
+        properties:
+            email:
+                type: string
+                x-go-name: Email
+            name:
+                type: string
+                x-go-name: Name
+        type: object
+        x-go-package: crm-app-go/docs
+    RegisterLeadFlyway:
+        properties:
+            additionalInfo1:
+                type: string
+                x-go-name: AdditionalInfo1
+            additionalInfo2:
+                type: string
+                x-go-name: AdditionalInfo2
+            additionalInfo3:
+                type: string
+                x-go-name: AdditionalInfo3
+            bussinesUnitId:
+                format: int64
+                type: integer
+                x-go-name: BussinesUnitId
+            campaignId:
+                type: string
+                x-go-name: CampaignId
+            country_iso:
+                type: string
+                x-go-name: Country_iso
+            email:
+                type: string
+                x-go-name: Email
+            last_name:
+                type: string
+                x-go-name: Last_name
+            name:
+                type: string
+                x-go-name: Name
+            password:
+                type: string
+                x-go-name: Password
+            phone_number:
+                type: string
+                x-go-name: Phone_number
+            subAffiliate:
+                type: string
+                x-go-name: SubAffiliate
+            tag:
+                type: string
+                x-go-name: Tag
+            tag1:
+                type: string
+                x-go-name: Tag1
+        type: object
+        x-go-package: crm-app-go/dto/input
     User:
         properties:
             CreatedAt:
@@ -60,6 +117,27 @@ info:
     title: awesome.
     version: 1.0.0
 paths:
+    /api/v1/flyway/register-user-crm:
+        post:
+            description: Create user
+            operationId: postUserParam
+            parameters:
+                - description: User Request Body.
+                  in: body
+                  name: Body
+                  schema:
+                    $ref: '#/definitions/UserRequestBody'
+            responses:
+                "200":
+                    $ref: '#/responses/userResponse'
+                "400":
+                    $ref: '#/responses/error400'
+                "404":
+                    $ref: '#/responses/error404'
+                "500":
+                    $ref: '#/responses/error500'
+            tags:
+                - User
     /api/v1/user:
         get:
             description: Fetch all users

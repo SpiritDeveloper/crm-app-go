@@ -4,7 +4,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-type Lead struct {
+type LeadFlayway struct {
 	gorm.Model
 	BusinessUnitId      string    `gorm:"size:255;not null;" json:"businessUnitId"`
 	Tpid     string    `gorm:"size:100;not null;unique" json:"tpid"`

@@ -54,8 +54,7 @@ func (g *gormDatabase) RunMigration() {
 		panic("Initialise gorm db before running migrations")
 	}
 	// g.client.AutoMigrate(&User{})
-
-	g.client.AutoMigrate(&Lead{})
+	g.client.AutoMigrate(&LeadFlayway{})
 	g.client.AutoMigrate(&Token{})
 	g.client.AutoMigrate(&Log{})
 	g.client.AutoMigrate(&Configuration{})
