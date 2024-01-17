@@ -1,6 +1,6 @@
 package input
 
-type RegisterLeadFlyway struct {
+type RegisterLeadFlywayRequestBody struct {
 	BussinesUnitId int    `json:"bussinesUnitId" validate:"required"`
 	Name string `json:"name" validate:"required"`
 	Last_name string `json:"last_name" validate:"required"`

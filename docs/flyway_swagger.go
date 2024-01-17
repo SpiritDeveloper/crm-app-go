@@ -1,33 +1,70 @@
 package docs
 
 import (
-	"crm-app-go/dto/input"
+	. "crm-app-go/dto/input"
+	"crm-app-go/model"
 )
 
-type FlywayRequestBody struct {
-	Name      string    `gorm:"size:255;not null;" json:"name"`
-	Email     string    `gorm:"size:100;not null;unique" json:"email"`
-}
-
-// swagger:route POST /api/v1/flyway/register-user-crm Flyway postUserParam
-// Register new lead for flyway
+// swagger:route POST /api/v1/flyway/register-user Flyway postRegisterLead
+// Register new user in crm flyway
 // responses:
-//   200: userResponse
+//   200: registerLeadResponse
 //   400: error400
 //   404: error404
 //   500: error500
 
-// Flyway Response
-// swagger:response userResponse
-type RegisterResponseWrapper struct {
+// Flyway Response Register new lead in crm flyway
+// swagger:response registerLeadResponse
+type RegisterLeadResponseWrapper struct {
 	// in:body
-	Body input.RegisterLeadFlyway
+	Success bool `json:"success"`
+	Message string `json:"message"`
+	Payload model.LeadFlayway `json:"payload"`
 }
 
-// swagger:parameters postUserParam
-type RegisterParamsWrapper struct {
-	// Flyway Request Body.
+// swagger:parameters postRegisterLead
+type RegisterLeadBodyWrapper struct {
+	// Register new lead body request.
 	// in:body
-	Body FlywayRequestBody
+	Body RegisterLeadFlywayRequestBody
 }
 
+// swagger:route POST /api/v1/flyway/register-transactions Flyway postRegisterTransactionParam
+// Register transaction in crm flyway
+// responses:
+//   200: createTransactionResponse
+//   400: error400
+//   404: error404
+//   500: error500
+
+// Flyway Response Register new transaction
+// swagger:response createTransactionResponse
+type RegisterTransactionResponseWrapper struct {
+	// in:body
+	Success bool `json:"success"`
+	Message string `json:"message"`
+	Payload model.LeadFlayway `json:"payload"`
+}
+
+// swagger:parameters postRegisterTransactionParam
+type RegisterTransactionBodyWrapper struct {
+	// Transaction Request Body.
+	// in:body
+	Body CrateTransactionFlyway
+}
+
+
+// swagger:route GET /api/v1/wallet/{ID}/transaction Flyway getTransactionParam
+// Fetch transaction associated with given wallet id
+// responses:
+//   200: getTransactionResponse
+//   400: error400
+//   404: error404
+//   500: error500
+
+// swagger:parameters getTransactionParam
+type GetTransactionParamsWrapper struct {
+	// Wallet ID
+	// In: path
+	ID string `json:"id"`
+}

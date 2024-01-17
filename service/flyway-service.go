@@ -7,7 +7,7 @@ import (
 )
 
 type IFlywayService interface{
-	RegisterLeadInCrm(lead *RegisterLeadFlyway) (*User, error)
+	RegisterLeadInCrm(lead *RegisterLeadFlywayRequestBody) (*User, error)
 	CrateTransactionInCrm(transaction *CrateTransactionFlyway) (*User, error)
 }
 
@@ -24,7 +24,7 @@ func NewFlywayService(repository.IFlywayRepository) IFlywayService{
 }
 
 
-func (flywayService *flywayService) RegisterLeadInCrm(lead *RegisterLeadFlyway) (*User, error) {
+func (flywayService *flywayService) RegisterLeadInCrm(lead *RegisterLeadFlywayRequestBody) (*User, error) {
 	item := User{}
 	return &item, nil 
 }

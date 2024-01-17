@@ -25,14 +25,14 @@ func NewFlywayController(service service.IFlywayService) IFlywayController {
 }
 
 func (flywayController *flywayController) registerLeadInCrm(w http.ResponseWriter, r *http.Request) {
-	var user RegisterLeadFlyway
+	var newRegister RegisterLeadFlywayRequestBody
 	decoder := json.NewDecoder(r.Body)
-	if err := decoder.Decode(&user); err != nil {
+	if err := decoder.Decode(&newRegister); err != nil {
 		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
 		return
 	}
 	defer r.Body.Close()
-	res, err := flywayService.RegisterLeadInCrm(&user)
+	res, err := flywayService.RegisterLeadInCrm(&newRegister)
 	if err != nil {
 		log.Printf("Not able to post User : %s", err)
 		respondWithError(w, http.StatusInternalServerError, err.Error())
@@ -42,14 +42,14 @@ func (flywayController *flywayController) registerLeadInCrm(w http.ResponseWrite
 }
 
 func (flywayController *flywayController) createTransactionInCrm(w http.ResponseWriter, r *http.Request) {
-	var transaction CrateTransactionFlyway
+	var newTransaction CrateTransactionFlyway
 	decoder := json.NewDecoder(r.Body)
-	if err := decoder.Decode(&transaction); err != nil {
+	if err := decoder.Decode(&newTransaction); err != nil {
 		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
 		return
 	}
 	defer r.Body.Close()
-	res, err := flywayService.CrateTransactionInCrm(&transaction)
+	res, err := flywayService.CrateTransactionInCrm(&newTransaction)
 	if err != nil {
 		log.Printf("Not able to post User : %s", err)
 		respondWithError(w, http.StatusInternalServerError, err.Error())

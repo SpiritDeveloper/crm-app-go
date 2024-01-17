@@ -1,7 +1,28 @@
 basePath: /
 consumes:
     - application/json
+    - application/xml
 definitions:
+    CrateTransactionFlyway:
+        properties:
+            amount:
+                format: int64
+                type: integer
+                x-go-name: Amount
+            email:
+                format: int64
+                type: integer
+                x-go-name: Email
+            idTransaction:
+                format: int64
+                type: integer
+                x-go-name: IdTransaction
+            pspName:
+                format: int64
+                type: integer
+                x-go-name: PspName
+        type: object
+        x-go-package: crm-app-go/dto/input
     DeleteMessage:
         properties:
             message:
@@ -16,17 +37,74 @@ definitions:
                 x-go-name: Error
         type: object
         x-go-package: crm-app-go/docs
-    FlywayRequestBody:
+    LeadFlayway:
         properties:
+            CreatedAt:
+                format: date-time
+                type: string
+            DeletedAt:
+                format: date-time
+                type: string
+            ID:
+                format: uint64
+                type: integer
+            UpdatedAt:
+                format: date-time
+                type: string
+            accountId:
+                type: string
+                x-go-name: AccountId
+            additionalInfo1:
+                type: string
+                x-go-name: AdditionalInfo1
+            additionalInfo2:
+                type: string
+                x-go-name: AdditionalInfo2
+            additionalInfo3:
+                type: string
+                x-go-name: AdditionalInfo3
+            businessUnitId:
+                type: string
+                x-go-name: BusinessUnitId
+            campaignId:
+                type: string
+                x-go-name: CampaignId
             email:
                 type: string
                 x-go-name: Email
+            isoCountry:
+                type: string
+                x-go-name: IsoCountry
+            lastName:
+                type: string
+                x-go-name: Lastname
             name:
                 type: string
                 x-go-name: Name
+            password:
+                type: string
+                x-go-name: Password
+            phone:
+                type: string
+                x-go-name: Phone
+            registrationUrl:
+                type: string
+                x-go-name: RegistrationUrl
+            subAffiliate:
+                type: string
+                x-go-name: SubAffiliate
+            tag:
+                type: string
+                x-go-name: Tag
+            tag1:
+                type: string
+                x-go-name: Tag1
+            tpid:
+                type: string
+                x-go-name: Tpid
         type: object
-        x-go-package: crm-app-go/docs
-    RegisterLeadFlyway:
+        x-go-package: crm-app-go/model
+    RegisterLeadFlywayRequestBody:
         properties:
             additionalInfo1:
                 type: string
@@ -111,25 +189,31 @@ definitions:
                 x-go-name: Name
         type: object
         x-go-package: crm-app-go/docs
-host: localhost:3000
+host: localhost
 info:
-    description: Documentation of our awesome API.
-    title: awesome.
-    version: 1.0.0
+    contact:
+        email: roberto.espiritu@platimex.com.mx
+        name: Roberto Espiritu
+    license:
+        name: MIT
+        url: http://opensource.org/licenses/MIT
+    termsOfService: there are no TOS at this moment, use at your own risk we take no responsibility
+    title: CRM API.
+    version: 0.0.1
 paths:
-    /api/v1/flyway/register-user-crm:
+    /api/v1/flyway/register-transactions:
         post:
-            description: Create user
-            operationId: postUserParam
+            description: Register transaction in crm flyway
+            operationId: postRegisterTransactionParam
             parameters:
-                - description: User Request Body.
+                - description: Transaction Request Body.
                   in: body
                   name: Body
                   schema:
-                    $ref: '#/definitions/UserRequestBody'
+                    $ref: '#/definitions/CrateTransactionFlyway'
             responses:
                 "200":
-                    $ref: '#/responses/userResponse'
+                    $ref: '#/responses/createTransactionResponse'
                 "400":
                     $ref: '#/responses/error400'
                 "404":
@@ -137,7 +221,28 @@ paths:
                 "500":
                     $ref: '#/responses/error500'
             tags:
-                - User
+                - Flyway
+    /api/v1/flyway/register-user:
+        post:
+            description: Register new user in crm flyway
+            operationId: postRegisterLead
+            parameters:
+                - description: Register new lead body request.
+                  in: body
+                  name: Body
+                  schema:
+                    $ref: '#/definitions/RegisterLeadFlywayRequestBody'
+            responses:
+                "200":
+                    $ref: '#/responses/registerLeadResponse'
+                "400":
+                    $ref: '#/responses/error400'
+                "404":
+                    $ref: '#/responses/error404'
+                "500":
+                    $ref: '#/responses/error500'
+            tags:
+                - Flyway
     /api/v1/user:
         get:
             description: Fetch all users
@@ -242,9 +347,40 @@ paths:
                     $ref: '#/responses/error500'
             tags:
                 - User
+    /api/v1/wallet/{ID}/transaction:
+        get:
+            description: Fetch transaction associated with given wallet id
+            operationId: getTransactionParam
+            parameters:
+                - description: Wallet ID
+                  in: path
+                  name: id
+                  required: true
+                  type: string
+                  x-go-name: ID
+            responses:
+                "200":
+                    $ref: '#/responses/getTransactionResponse'
+                "400":
+                    $ref: '#/responses/error400'
+                "404":
+                    $ref: '#/responses/error404'
+                "500":
+                    $ref: '#/responses/error500'
+            tags:
+                - Flyway
 produces:
     - application/json
+    - application/xml
 responses:
+    createTransactionResponse:
+        description: Flyway Response Register new transaction
+        headers:
+            message:
+                type: string
+            payload: {}
+        schema:
+            $ref: '#/definitions/LeadFlayway'
     delUserResponse:
         description: User delete Response
         schema:
@@ -267,10 +403,26 @@ responses:
             items:
                 $ref: '#/definitions/User'
             type: array
+    registerLeadResponse:
+        description: Flyway Response Register new lead in crm flyway
+        headers:
+            message:
+                type: string
+            payload: {}
+        schema:
+            $ref: '#/definitions/LeadFlayway'
     userResponse:
         description: User Response
         schema:
             $ref: '#/definitions/User'
 schemes:
     - http
+    - https
 swagger: "2.0"
+x-meta-array:
+    - value1
+    - value2
+x-meta-array-obj:
+    - name: obj
+      value: field
+x-meta-value: value

@@ -33,7 +33,6 @@ var (
 var (
 	leverateService    service.ILeverateService
 	leverateController controller.ILeverateController
-
 	logRepository           repository.ILogRepository
 	configurationRepository repository.IConfigurationRepository
 )
@@ -85,7 +84,7 @@ func initUserServiceContainer() {
 
 func initFlaywayServiceCointainer() {
 	flywayRepository = repository.NewLogRepository(gDb)
-	flywayService = service.NewLeverateService(logRepository)
+	flywayService = service.NewLeverateService(logRepository, configurationRepository)
 	flywayController = controller.NewLeverateController(leverateService)
 
 	httpRouter.POST("/flyway/register-user-crm", userController.PostUser)
