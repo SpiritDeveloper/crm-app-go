@@ -23,13 +23,6 @@ definitions:
                 x-go-name: PspName
         type: object
         x-go-package: crm-app-go/dto/input
-    DeleteMessage:
-        properties:
-            message:
-                type: string
-                x-go-name: Message
-        type: object
-        x-go-package: crm-app-go/docs
     ErrorMessage:
         properties:
             error:
@@ -37,73 +30,6 @@ definitions:
                 x-go-name: Error
         type: object
         x-go-package: crm-app-go/docs
-    LeadFlayway:
-        properties:
-            CreatedAt:
-                format: date-time
-                type: string
-            DeletedAt:
-                format: date-time
-                type: string
-            ID:
-                format: uint64
-                type: integer
-            UpdatedAt:
-                format: date-time
-                type: string
-            accountId:
-                type: string
-                x-go-name: AccountId
-            additionalInfo1:
-                type: string
-                x-go-name: AdditionalInfo1
-            additionalInfo2:
-                type: string
-                x-go-name: AdditionalInfo2
-            additionalInfo3:
-                type: string
-                x-go-name: AdditionalInfo3
-            businessUnitId:
-                type: string
-                x-go-name: BusinessUnitId
-            campaignId:
-                type: string
-                x-go-name: CampaignId
-            email:
-                type: string
-                x-go-name: Email
-            isoCountry:
-                type: string
-                x-go-name: IsoCountry
-            lastName:
-                type: string
-                x-go-name: Lastname
-            name:
-                type: string
-                x-go-name: Name
-            password:
-                type: string
-                x-go-name: Password
-            phone:
-                type: string
-                x-go-name: Phone
-            registrationUrl:
-                type: string
-                x-go-name: RegistrationUrl
-            subAffiliate:
-                type: string
-                x-go-name: SubAffiliate
-            tag:
-                type: string
-                x-go-name: Tag
-            tag1:
-                type: string
-                x-go-name: Tag1
-            tpid:
-                type: string
-                x-go-name: Tpid
-        type: object
-        x-go-package: crm-app-go/model
     RegisterLeadFlywayRequestBody:
         properties:
             additionalInfo1:
@@ -151,44 +77,206 @@ definitions:
                 x-go-name: Tag1
         type: object
         x-go-package: crm-app-go/dto/input
-    User:
+    RegisterTransactionError400Model:
         properties:
-            CreatedAt:
-                format: date-time
+            message:
                 type: string
-            DeletedAt:
-                format: date-time
-                type: string
-            ID:
-                format: uint64
-                type: integer
-            UpdatedAt:
-                format: date-time
-                type: string
-            email:
-                type: string
-                x-go-name: Email
-            mobile:
-                type: string
-                x-go-name: Mobile
-            name:
-                type: string
-                x-go-name: Name
+                x-go-name: Message
+                x-order: "1"
+            payload:
+                properties:
+                    error:
+                        items:
+                            type: string
+                        type: array
+                        x-go-name: Error
+                        x-order: "0"
+                type: object
+                x-go-name: Payload
+            success:
+                type: boolean
+                x-go-name: Success
+                x-order: "0"
         type: object
-        x-go-package: crm-app-go/model
-    UserRequestBody:
+        x-go-package: crm-app-go/dto/output
+    RegisterTransactionError404Model:
         properties:
-            email:
+            message:
                 type: string
-                x-go-name: Email
-            mobile:
-                type: string
-                x-go-name: Mobile
-            name:
-                type: string
-                x-go-name: Name
+                x-go-name: Message
+                x-order: "1"
+            payload:
+                properties:
+                    error:
+                        items:
+                            type: string
+                        type: array
+                        x-go-name: Error
+                        x-order: "0"
+                type: object
+                x-go-name: Payload
+            success:
+                type: boolean
+                x-go-name: Success
+                x-order: "0"
         type: object
-        x-go-package: crm-app-go/docs
+        x-go-package: crm-app-go/dto/output
+    RegisterTransactionError500Model:
+        properties:
+            message:
+                type: string
+                x-go-name: Message
+                x-order: "1"
+            payload:
+                properties:
+                    error:
+                        items:
+                            type: string
+                        type: array
+                        x-go-name: Error
+                        x-order: "0"
+                type: object
+                x-go-name: Payload
+            success:
+                type: boolean
+                x-go-name: Success
+                x-order: "0"
+        type: object
+        x-go-package: crm-app-go/dto/output
+    RegisterTransactionSuccessModel:
+        properties:
+            message:
+                type: string
+                x-go-name: Message
+                x-order: "1"
+            payload:
+                properties:
+                    code:
+                        format: int64
+                        type: integer
+                        x-go-name: Code
+                        x-order: "0"
+                    data:
+                        properties:
+                            code:
+                                format: int64
+                                type: integer
+                                x-go-name: Code
+                                x-order: "0"
+                            message:
+                                type: string
+                                x-go-name: Message
+                                x-order: "1"
+                        type: object
+                        x-go-name: Data
+                        x-order: "2"
+                    message:
+                        type: string
+                        x-go-name: Message
+                        x-order: "1"
+                type: object
+                x-go-name: Payload
+            success:
+                type: boolean
+                x-go-name: Success
+                x-order: "0"
+        type: object
+        x-go-package: crm-app-go/dto/output
+    RegisterUserError400Model:
+        properties:
+            message:
+                type: string
+                x-go-name: Message
+                x-order: "1"
+            payload:
+                properties:
+                    error:
+                        items:
+                            type: string
+                        type: array
+                        x-go-name: Error
+                        x-order: "0"
+                type: object
+                x-go-name: Payload
+            success:
+                type: boolean
+                x-go-name: Success
+                x-order: "0"
+        type: object
+        x-go-package: crm-app-go/dto/output
+    RegisterUserError404Model:
+        properties:
+            message:
+                type: string
+                x-go-name: Message
+                x-order: "1"
+            payload:
+                properties:
+                    error:
+                        items:
+                            type: string
+                        type: array
+                        x-go-name: Error
+                        x-order: "0"
+                type: object
+                x-go-name: Payload
+            success:
+                type: boolean
+                x-go-name: Success
+                x-order: "0"
+        type: object
+        x-go-package: crm-app-go/dto/output
+    RegisterUserError500Model:
+        properties:
+            message:
+                type: string
+                x-go-name: Message
+                x-order: "1"
+            payload:
+                properties:
+                    error:
+                        items:
+                            type: string
+                        type: array
+                        x-go-name: Error
+                        x-order: "0"
+                type: object
+                x-go-name: Payload
+            success:
+                type: boolean
+                x-go-name: Success
+                x-order: "0"
+        type: object
+        x-go-package: crm-app-go/dto/output
+    RegisterUserSuccessModel:
+        properties:
+            message:
+                type: string
+                x-go-name: Message
+                x-order: "1"
+            payload:
+                properties:
+                    accountId:
+                        type: string
+                        x-go-name: AccountId
+                        x-order: "2"
+                    code:
+                        format: int64
+                        type: integer
+                        x-go-name: Code
+                        x-order: "0"
+                    url:
+                        type: string
+                        x-go-name: Url
+                        x-order: "1"
+                type: object
+                x-go-name: Payload
+            success:
+                type: boolean
+                x-go-name: Success
+                x-order: "0"
+        type: object
+        x-go-package: crm-app-go/dto/output
 host: localhost
 info:
     contact:
@@ -203,23 +291,23 @@ info:
 paths:
     /api/v1/flyway/register-transactions:
         post:
-            description: Register transaction in crm flyway
-            operationId: postRegisterTransactionParam
+            description: Register new user in crm flyway
+            operationId: postRegisterTransacgtions
             parameters:
-                - description: Transaction Request Body.
+                - description: Register new transaction in crmn flyway
                   in: body
                   name: Body
                   schema:
                     $ref: '#/definitions/CrateTransactionFlyway'
             responses:
                 "200":
-                    $ref: '#/responses/createTransactionResponse'
+                    $ref: '#/responses/registerTransactionResponseStatus200'
                 "400":
-                    $ref: '#/responses/error400'
+                    $ref: '#/responses/registerTransactionResponseStatus400'
                 "404":
-                    $ref: '#/responses/error404'
+                    $ref: '#/responses/registerTransactionResponseStatus404'
                 "500":
-                    $ref: '#/responses/error500'
+                    $ref: '#/responses/registerTransactionResponseStatus500'
             tags:
                 - Flyway
     /api/v1/flyway/register-user:
@@ -234,157 +322,19 @@ paths:
                     $ref: '#/definitions/RegisterLeadFlywayRequestBody'
             responses:
                 "200":
-                    $ref: '#/responses/registerLeadResponse'
+                    $ref: '#/responses/registerLeadResponseStatus200'
                 "400":
-                    $ref: '#/responses/error400'
+                    $ref: '#/responses/registerLeadResponseStatus400'
                 "404":
-                    $ref: '#/responses/error404'
+                    $ref: '#/responses/registerLeadResponseStatus404'
                 "500":
-                    $ref: '#/responses/error500'
-            tags:
-                - Flyway
-    /api/v1/user:
-        get:
-            description: Fetch all users
-            operationId: getUserId
-            responses:
-                "200":
-                    $ref: '#/responses/getUserResponse'
-                "400":
-                    $ref: '#/responses/error400'
-                "404":
-                    $ref: '#/responses/error404'
-                "500":
-                    $ref: '#/responses/error500'
-            tags:
-                - User
-        post:
-            description: Create user
-            operationId: postUserParam
-            parameters:
-                - description: User Request Body.
-                  in: body
-                  name: Body
-                  schema:
-                    $ref: '#/definitions/UserRequestBody'
-            responses:
-                "200":
-                    $ref: '#/responses/userResponse'
-                "400":
-                    $ref: '#/responses/error400'
-                "404":
-                    $ref: '#/responses/error404'
-                "500":
-                    $ref: '#/responses/error500'
-            tags:
-                - User
-    /api/v1/user/{ID}:
-        delete:
-            description: Delete user with given id
-            operationId: delUserParam
-            parameters:
-                - description: User ID
-                  in: path
-                  name: id
-                  required: true
-                  type: string
-                  x-go-name: ID
-            responses:
-                "200":
-                    $ref: '#/responses/delUserResponse'
-                "400":
-                    $ref: '#/responses/error400'
-                "404":
-                    $ref: '#/responses/error404'
-                "500":
-                    $ref: '#/responses/error500'
-            tags:
-                - User
-        get:
-            description: Get user details for given id
-            operationId: getUserParam
-            parameters:
-                - description: User ID
-                  in: path
-                  name: id
-                  required: true
-                  type: string
-                  x-go-name: ID
-            responses:
-                "200":
-                    $ref: '#/responses/userResponse'
-                "400":
-                    $ref: '#/responses/error400'
-                "404":
-                    $ref: '#/responses/error404'
-                "500":
-                    $ref: '#/responses/error500'
-            tags:
-                - User
-        put:
-            description: Update user details for given id
-            operationId: putUserParam
-            parameters:
-                - description: User Request Body.
-                  in: body
-                  name: Body
-                  schema:
-                    $ref: '#/definitions/UserRequestBody'
-                - description: User ID
-                  in: path
-                  name: id
-                  required: true
-                  type: string
-                  x-go-name: ID
-            responses:
-                "200":
-                    $ref: '#/responses/userResponse'
-                "400":
-                    $ref: '#/responses/error400'
-                "404":
-                    $ref: '#/responses/error404'
-                "500":
-                    $ref: '#/responses/error500'
-            tags:
-                - User
-    /api/v1/wallet/{ID}/transaction:
-        get:
-            description: Fetch transaction associated with given wallet id
-            operationId: getTransactionParam
-            parameters:
-                - description: Wallet ID
-                  in: path
-                  name: id
-                  required: true
-                  type: string
-                  x-go-name: ID
-            responses:
-                "200":
-                    $ref: '#/responses/getTransactionResponse'
-                "400":
-                    $ref: '#/responses/error400'
-                "404":
-                    $ref: '#/responses/error404'
-                "500":
-                    $ref: '#/responses/error500'
+                    $ref: '#/responses/registerLeadResponseStatus500'
             tags:
                 - Flyway
 produces:
     - application/json
     - application/xml
 responses:
-    createTransactionResponse:
-        description: Flyway Response Register new transaction
-        headers:
-            message:
-                type: string
-            payload: {}
-        schema:
-            $ref: '#/definitions/LeadFlayway'
-    delUserResponse:
-        description: User delete Response
-        schema:
-            $ref: '#/definitions/DeleteMessage'
     error400:
         description: Bad Request error Response | Validation error message or invalid json
         schema:
@@ -397,24 +347,38 @@ responses:
         description: Internal server error Response | server is down or db constraint errors
         schema:
             $ref: '#/definitions/ErrorMessage'
-    getUserResponse:
-        description: User Response
+    registerLeadResponseStatus200:
+        description: Flyway Response With Status Code 200
         schema:
-            items:
-                $ref: '#/definitions/User'
-            type: array
-    registerLeadResponse:
-        description: Flyway Response Register new lead in crm flyway
-        headers:
-            message:
-                type: string
-            payload: {}
+            $ref: '#/definitions/RegisterUserSuccessModel'
+    registerLeadResponseStatus400:
+        description: Flyway Response With Status Code 400
         schema:
-            $ref: '#/definitions/LeadFlayway'
-    userResponse:
-        description: User Response
+            $ref: '#/definitions/RegisterUserError400Model'
+    registerLeadResponseStatus404:
+        description: Flyway Response With Status Code 404
         schema:
-            $ref: '#/definitions/User'
+            $ref: '#/definitions/RegisterUserError404Model'
+    registerLeadResponseStatus500:
+        description: Flyway Response With Status Code 500
+        schema:
+            $ref: '#/definitions/RegisterUserError500Model'
+    registerTransactionResponseStatus200:
+        description: Flyway Response With Status Code 200
+        schema:
+            $ref: '#/definitions/RegisterTransactionSuccessModel'
+    registerTransactionResponseStatus400:
+        description: Flyway Response With Status Code 400
+        schema:
+            $ref: '#/definitions/RegisterTransactionError400Model'
+    registerTransactionResponseStatus404:
+        description: Flyway Response With Status Code 404
+        schema:
+            $ref: '#/definitions/RegisterTransactionError404Model'
+    registerTransactionResponseStatus500:
+        description: Flyway Response With Status Code 500
+        schema:
+            $ref: '#/definitions/RegisterTransactionError500Model'
 schemes:
     - http
     - https

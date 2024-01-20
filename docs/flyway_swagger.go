@@ -2,25 +2,16 @@ package docs
 
 import (
 	. "crm-app-go/dto/input"
-	"crm-app-go/model"
+	. "crm-app-go/dto/output"
 )
 
 // swagger:route POST /api/v1/flyway/register-user Flyway postRegisterLead
 // Register new user in crm flyway
 // responses:
-//   200: registerLeadResponse
-//   400: error400
-//   404: error404
-//   500: error500
-
-// Flyway Response Register new lead in crm flyway
-// swagger:response registerLeadResponse
-type RegisterLeadResponseWrapper struct {
-	// in:body
-	Success bool `json:"success"`
-	Message string `json:"message"`
-	Payload model.LeadFlayway `json:"payload"`
-}
+//   200: registerLeadResponseStatus200
+//   400: registerLeadResponseStatus400
+//   404: registerLeadResponseStatus404
+//   500: registerLeadResponseStatus500
 
 // swagger:parameters postRegisterLead
 type RegisterLeadBodyWrapper struct {
@@ -29,42 +20,83 @@ type RegisterLeadBodyWrapper struct {
 	Body RegisterLeadFlywayRequestBody
 }
 
-// swagger:route POST /api/v1/flyway/register-transactions Flyway postRegisterTransactionParam
-// Register transaction in crm flyway
-// responses:
-//   200: createTransactionResponse
-//   400: error400
-//   404: error404
-//   500: error500
-
-// Flyway Response Register new transaction
-// swagger:response createTransactionResponse
-type RegisterTransactionResponseWrapper struct {
+// Flyway Response With Status Code 200
+// swagger:response registerLeadResponseStatus200
+type Status200RegisterLeadResponseWrapper struct {
+	// Register new lead body request.
 	// in:body
-	Success bool `json:"success"`
-	Message string `json:"message"`
-	Payload model.LeadFlayway `json:"payload"`
+	Response *RegisterUserSuccessModel `json:"payload"`
 }
 
-// swagger:parameters postRegisterTransactionParam
+// Flyway Response With Status Code 400
+// swagger:response registerLeadResponseStatus400
+type Status400RegisterLeadResponseWrapper struct {
+	// Register new lead body request.
+	// in:body
+	Response *RegisterUserError400Model `json:"payload"`
+}
+
+// Flyway Response With Status Code 404
+// swagger:response registerLeadResponseStatus404
+type Status404RegisterLeadResponseWrapper struct {
+	// Register new lead body request.
+	// in:body
+	Response *RegisterUserError404Model `json:"payload"`
+}
+
+// Flyway Response With Status Code 500
+// swagger:response registerLeadResponseStatus500
+type Status500RegisterLeadResponseWrapper struct {
+	// Register new lead body request.
+	// in:body
+	Response *RegisterUserError500Model `json:"payload"`
+}
+
+
+
+// swagger:route POST /api/v1/flyway/register-transactions Flyway postRegisterTransacgtions
+// Register new user in crm flyway
+// responses:
+//   200: registerTransactionResponseStatus200
+//   400: registerTransactionResponseStatus400
+//   404: registerTransactionResponseStatus404
+//   500: registerTransactionResponseStatus500
+
+// swagger:parameters postRegisterTransacgtions
 type RegisterTransactionBodyWrapper struct {
-	// Transaction Request Body.
+	// Register new transaction in crmn flyway
 	// in:body
 	Body CrateTransactionFlyway
 }
 
+// Flyway Response With Status Code 200
+// swagger:response registerTransactionResponseStatus200
+type Status200RegisterTransactionResponseWrapper struct {
+	// Register new lead body request.
+	// in:body
+	Response *RegisterTransactionSuccessModel `json:"payload"`
+}
 
-// swagger:route GET /api/v1/wallet/{ID}/transaction Flyway getTransactionParam
-// Fetch transaction associated with given wallet id
-// responses:
-//   200: getTransactionResponse
-//   400: error400
-//   404: error404
-//   500: error500
+// Flyway Response With Status Code 400
+// swagger:response registerTransactionResponseStatus400
+type Status400RegisterTransactionResponseWrapper struct {
+	// Response error when a controlled error exists.
+	// in:body
+	Response *RegisterTransactionError400Model `json:"payload"`
+}
 
-// swagger:parameters getTransactionParam
-type GetTransactionParamsWrapper struct {
-	// Wallet ID
-	// In: path
-	ID string `json:"id"`
+// Flyway Response With Status Code 404
+// swagger:response registerTransactionResponseStatus404
+type Status404RegisterTransactionResponseWrapper struct {
+	// Response when not found data.
+	// in:body
+	Response *RegisterTransactionError404Model `json:"payload"`
+}
+
+// Flyway Response With Status Code 500
+// swagger:response registerTransactionResponseStatus500
+type Status500RegisterTransactionResponseWrapper struct {
+	// Response when exist have internal error in server.
+	// in:body
+	Response *RegisterTransactionError500Model `json:"payload"`
 }
