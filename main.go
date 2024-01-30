@@ -82,8 +82,9 @@ func initUserServiceContainer() {
 }
 
 func initFlaywayServiceCointainer() {
-	flywayRepository = repository.NewFlywayRepository(gDb)
-	flywayService = service.NewFlywayService(flywayRepository)
+	logRepository = repository.NewLogRepository(gDb)
+	configurationRepository = repository.NewConfigurationRepository(gDb)
+	flywayService = service.NewFlywayService(logRepository, configurationRepository)
 	flywayController = controller.NewFlywayController(flywayService)
 
 	//httpRouter.POST("/test", leverateController.SendLeadToCrm)

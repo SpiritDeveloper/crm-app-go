@@ -80,7 +80,8 @@ definitions:
     RegisterTransactionError400Model:
         properties:
             code:
-                type: string
+                format: int64
+                type: integer
                 x-go-name: Code
                 x-order: "0"
             message:
@@ -106,7 +107,8 @@ definitions:
     RegisterTransactionError404Model:
         properties:
             code:
-                type: string
+                format: int64
+                type: integer
                 x-go-name: Code
                 x-order: "0"
             message:
@@ -132,7 +134,8 @@ definitions:
     RegisterTransactionError500Model:
         properties:
             code:
-                type: string
+                format: int64
+                type: integer
                 x-go-name: Code
                 x-order: "0"
             message:
@@ -158,7 +161,8 @@ definitions:
     RegisterTransactionSuccessModel:
         properties:
             code:
-                type: string
+                format: int64
+                type: integer
                 x-go-name: Code
                 x-order: "0"
             message:
@@ -182,7 +186,8 @@ definitions:
     RegisterUserError400Model:
         properties:
             code:
-                type: string
+                format: int64
+                type: integer
                 x-go-name: Code
                 x-order: "0"
             message:
@@ -208,7 +213,8 @@ definitions:
     RegisterUserError404Model:
         properties:
             code:
-                type: string
+                format: int64
+                type: integer
                 x-go-name: Code
                 x-order: "0"
             message:
@@ -234,7 +240,8 @@ definitions:
     RegisterUserError500Model:
         properties:
             code:
-                type: string
+                format: int64
+                type: integer
                 x-go-name: Code
                 x-order: "0"
             message:
@@ -260,7 +267,8 @@ definitions:
     RegisterUserSuccessModel:
         properties:
             code:
-                type: string
+                format: int64
+                type: integer
                 x-go-name: Code
                 x-order: "0"
             message:

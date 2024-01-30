@@ -4,7 +4,10 @@ import (
 	. "crm-app-go/dto/input"
 	"crm-app-go/service"
 	"encoding/json"
+	"fmt"
 	"net/http"
+
+	"github.com/go-playground/validator/v10"
 )
 
 type IFlywayController interface {
@@ -31,6 +34,22 @@ func (flywayController *flywayController) RegisterLeadInCrm(w http.ResponseWrite
 		return
 	}
 	defer r.Body.Close()
+
+	// Create a new validator instance
+    instance := validator.New()
+
+    // Validate the User struct
+    validate:= instance.Struct(newRegister)
+    if validate != nil {
+        // Validation failed, handle the error
+        errors := validate.(validator.ValidationErrors)
+		for _, validationError := range errors {
+            fmt.Println(validationError.Field(), validationError.Error())
+        }
+        respondWithError(w, http.StatusBadRequest, "")
+        return
+    }
+
 	res := flywayService.RegisterLeadInCrm(&newRegister)
 	respondWithJSON(w, http.StatusOK, res)
 }
