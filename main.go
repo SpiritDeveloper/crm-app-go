@@ -39,9 +39,9 @@ var (
 
 //Flyway 
 var (
-	flywayService    service.ILeverateService
-	flywayController controller.ILeverateController
-	flywayRepository repository.ILogRepository
+	flywayService    service.IFlywayService
+	flywayController controller.IFlywayController
+	flywayRepository repository.IFlywayRepository
 )
 
 func main() {
@@ -51,8 +51,7 @@ func main() {
 	gormDb = db.NewGormDatabase()
 	gDb = gormDb.GetDatabase(c.Database)
 	gormDb.RunMigration()
-	initUserServiceContainer()
-	initLeverateServiceContainer()
+	initFlaywayServiceCointainer()
 	httpRouter.SERVE(c.App.Port)
 }
 
@@ -83,12 +82,16 @@ func initUserServiceContainer() {
 }
 
 func initFlaywayServiceCointainer() {
-	flywayRepository = repository.NewLogRepository(gDb)
-	flywayService = service.NewLeverateService(logRepository, configurationRepository)
-	flywayController = controller.NewLeverateController(leverateService)
+	flywayRepository = repository.NewFlywayRepository(gDb)
+	flywayService = service.NewFlywayService(flywayRepository)
+	flywayController = controller.NewFlywayController(flywayService)
 
-	httpRouter.POST("/flyway/register-user-crm", userController.PostUser)
-	httpRouter.POST("/flyway/create-transaction", userController.PostUser)
+	//httpRouter.POST("/test", leverateController.SendLeadToCrm)
+	//httpRouter.POST("/create-in-crm/2", leverateController.SendLeadToCrm)
+
+	httpRouter.POST("/flyway/register-transactions", flywayController.CrateTransactionInCrm)
+	httpRouter.POST("/flyway/register-user", flywayController.RegisterLeadInCrm)
+
 }
 
 

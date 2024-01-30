@@ -79,10 +79,14 @@ definitions:
         x-go-package: crm-app-go/dto/input
     RegisterTransactionError400Model:
         properties:
+            code:
+                type: string
+                x-go-name: Code
+                x-order: "0"
             message:
                 type: string
                 x-go-name: Message
-                x-order: "1"
+                x-order: "2"
             payload:
                 properties:
                     error:
@@ -96,15 +100,19 @@ definitions:
             success:
                 type: boolean
                 x-go-name: Success
-                x-order: "0"
+                x-order: "1"
         type: object
         x-go-package: crm-app-go/dto/output
     RegisterTransactionError404Model:
         properties:
+            code:
+                type: string
+                x-go-name: Code
+                x-order: "0"
             message:
                 type: string
                 x-go-name: Message
-                x-order: "1"
+                x-order: "2"
             payload:
                 properties:
                     error:
@@ -118,15 +126,19 @@ definitions:
             success:
                 type: boolean
                 x-go-name: Success
-                x-order: "0"
+                x-order: "1"
         type: object
         x-go-package: crm-app-go/dto/output
     RegisterTransactionError500Model:
         properties:
+            code:
+                type: string
+                x-go-name: Code
+                x-order: "0"
             message:
                 type: string
                 x-go-name: Message
-                x-order: "1"
+                x-order: "2"
             payload:
                 properties:
                     error:
@@ -140,54 +152,43 @@ definitions:
             success:
                 type: boolean
                 x-go-name: Success
-                x-order: "0"
+                x-order: "1"
         type: object
         x-go-package: crm-app-go/dto/output
     RegisterTransactionSuccessModel:
         properties:
+            code:
+                type: string
+                x-go-name: Code
+                x-order: "0"
             message:
                 type: string
                 x-go-name: Message
-                x-order: "1"
+                x-order: "2"
             payload:
                 properties:
-                    code:
-                        format: int64
-                        type: integer
-                        x-go-name: Code
-                        x-order: "0"
-                    data:
-                        properties:
-                            code:
-                                format: int64
-                                type: integer
-                                x-go-name: Code
-                                x-order: "0"
-                            message:
-                                type: string
-                                x-go-name: Message
-                                x-order: "1"
-                        type: object
-                        x-go-name: Data
-                        x-order: "2"
                     message:
                         type: string
                         x-go-name: Message
-                        x-order: "1"
+                        x-order: "0"
                 type: object
                 x-go-name: Payload
             success:
                 type: boolean
                 x-go-name: Success
-                x-order: "0"
+                x-order: "1"
         type: object
         x-go-package: crm-app-go/dto/output
     RegisterUserError400Model:
         properties:
+            code:
+                type: string
+                x-go-name: Code
+                x-order: "0"
             message:
                 type: string
                 x-go-name: Message
-                x-order: "1"
+                x-order: "2"
             payload:
                 properties:
                     error:
@@ -201,15 +202,19 @@ definitions:
             success:
                 type: boolean
                 x-go-name: Success
-                x-order: "0"
+                x-order: "1"
         type: object
         x-go-package: crm-app-go/dto/output
     RegisterUserError404Model:
         properties:
+            code:
+                type: string
+                x-go-name: Code
+                x-order: "0"
             message:
                 type: string
                 x-go-name: Message
-                x-order: "1"
+                x-order: "2"
             payload:
                 properties:
                     error:
@@ -223,15 +228,19 @@ definitions:
             success:
                 type: boolean
                 x-go-name: Success
-                x-order: "0"
+                x-order: "1"
         type: object
         x-go-package: crm-app-go/dto/output
     RegisterUserError500Model:
         properties:
+            code:
+                type: string
+                x-go-name: Code
+                x-order: "0"
             message:
                 type: string
                 x-go-name: Message
-                x-order: "1"
+                x-order: "2"
             payload:
                 properties:
                     error:
@@ -245,39 +254,38 @@ definitions:
             success:
                 type: boolean
                 x-go-name: Success
-                x-order: "0"
+                x-order: "1"
         type: object
         x-go-package: crm-app-go/dto/output
     RegisterUserSuccessModel:
         properties:
+            code:
+                type: string
+                x-go-name: Code
+                x-order: "0"
             message:
                 type: string
                 x-go-name: Message
-                x-order: "1"
+                x-order: "2"
             payload:
                 properties:
                     accountId:
                         type: string
                         x-go-name: AccountId
-                        x-order: "2"
-                    code:
-                        format: int64
-                        type: integer
-                        x-go-name: Code
-                        x-order: "0"
+                        x-order: "1"
                     url:
                         type: string
                         x-go-name: Url
-                        x-order: "1"
+                        x-order: "0"
                 type: object
                 x-go-name: Payload
             success:
                 type: boolean
                 x-go-name: Success
-                x-order: "0"
+                x-order: "1"
         type: object
         x-go-package: crm-app-go/dto/output
-host: localhost
+host: localhost:3002
 info:
     contact:
         email: roberto.espiritu@platimex.com.mx

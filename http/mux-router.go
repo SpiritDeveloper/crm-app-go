@@ -35,25 +35,28 @@ func (r *muxRouter) ADDVERSION(uri string) {
 }
 
 func (r *muxRouter) GET(uri string, f func(w http.ResponseWriter, r *http.Request)) {
-	r.client.HandleFunc(uri,f).Methods("GET")
+	r.client.HandleFunc(uri,f).Methods("GET", "OPTIONS")
 }
 
 func (r *muxRouter) POST(uri string, f func(w http.ResponseWriter, r *http.Request)) {
-	r.client.HandleFunc(uri,f).Methods("POST")
+	r.client.HandleFunc(uri,f).Methods("POST", "OPTIONS")
 }
 
 func (r *muxRouter) PUT(uri string, f func(w http.ResponseWriter, r *http.Request)) {
-	r.client.HandleFunc(uri,f).Methods("PUT")
+	r.client.HandleFunc(uri,f).Methods("PUT", "OPTIONS")
 }
 
 func (r *muxRouter) DELETE(uri string, f func(w http.ResponseWriter, r *http.Request)) {
-	r.client.HandleFunc(uri,f).Methods("DELETE")
+	r.client.HandleFunc(uri,f).Methods("DELETE", "OPTIONS")
 }
 
 func (r *muxRouter) SERVE(port string) {
-	headers := handlers.AllowedHeaders([]string{"*"})
-    methods := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS"})
-    origins := handlers.AllowedOrigins([]string{"*"})
+	headersOk := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization", "withCredentials"})
+	methodsOk := handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "OPTIONS"})
+	originsOk := handlers.AllowedOrigins([]string{"*"})
+	credentialsOk := handlers.AllowCredentials()
 	log.Printf("Mux HTTP server running on port %v", port)
-	log.Fatal(http.ListenAndServe(":" + port, handlers.CORS(origins, headers, methods)(r.client)))
+	log.Fatal(http.ListenAndServe(":" + port, handlers.CORS(headersOk,methodsOk, originsOk, credentialsOk)(r.client)))
 }
+
+

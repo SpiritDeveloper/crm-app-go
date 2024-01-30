@@ -34,12 +34,9 @@ type RegisterUserSuccessModel struct {
 	Payload struct {
 		// Extensions:
     	// x-order: "0"
-		Code    int `json:"code"`
-		// Extensions:
-    	// x-order: "1"
 		Url string `json:"url"`
 		// Extensions:
-    	// x-order: "2"
+    	// x-order: "1"
 		AccountId string `json:"accountId"`
 	} `json:"payload"`
 }

@@ -4,13 +4,12 @@ import (
 	. "crm-app-go/dto/input"
 	"crm-app-go/service"
 	"encoding/json"
-	"log"
 	"net/http"
 )
 
 type IFlywayController interface {
-	registerLeadInCrm(w http.ResponseWriter, r *http.Request)
-	createTransactionInCrm(w http.ResponseWriter, r *http.Request)
+	RegisterLeadInCrm(w http.ResponseWriter, r *http.Request)
+	CrateTransactionInCrm(w http.ResponseWriter, r *http.Request)
 }
 
 type flywayController struct{}
@@ -24,7 +23,7 @@ func NewFlywayController(service service.IFlywayService) IFlywayController {
 	return &flywayController{}
 }
 
-func (flywayController *flywayController) registerLeadInCrm(w http.ResponseWriter, r *http.Request) {
+func (flywayController *flywayController) RegisterLeadInCrm(w http.ResponseWriter, r *http.Request) {
 	var newRegister RegisterLeadFlywayRequestBody
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&newRegister); err != nil {
@@ -32,16 +31,11 @@ func (flywayController *flywayController) registerLeadInCrm(w http.ResponseWrite
 		return
 	}
 	defer r.Body.Close()
-	res, err := flywayService.RegisterLeadInCrm(&newRegister)
-	if err != nil {
-		log.Printf("Not able to post User : %s", err)
-		respondWithError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
-	respondWithJSON(w, http.StatusCreated, res)
+	res := flywayService.RegisterLeadInCrm(&newRegister)
+	respondWithJSON(w, http.StatusOK, res)
 }
 
-func (flywayController *flywayController) createTransactionInCrm(w http.ResponseWriter, r *http.Request) {
+func (flywayController *flywayController) CrateTransactionInCrm(w http.ResponseWriter, r *http.Request) {
 	var newTransaction CrateTransactionFlyway
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&newTransaction); err != nil {
@@ -49,11 +43,6 @@ func (flywayController *flywayController) createTransactionInCrm(w http.Response
 		return
 	}
 	defer r.Body.Close()
-	res, err := flywayService.CrateTransactionInCrm(&newTransaction)
-	if err != nil {
-		log.Printf("Not able to post User : %s", err)
-		respondWithError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
-	respondWithJSON(w, http.StatusCreated, res)
+	res := flywayService.CrateTransactionInCrm(&newTransaction)
+	respondWithJSON(w, http.StatusOK, res)
 }
