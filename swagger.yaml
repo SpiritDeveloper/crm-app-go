@@ -10,8 +10,7 @@ definitions:
                 type: integer
                 x-go-name: Amount
             email:
-                format: int64
-                type: integer
+                type: string
                 x-go-name: Email
             idTransaction:
                 format: int64
@@ -23,13 +22,6 @@ definitions:
                 x-go-name: PspName
         type: object
         x-go-package: crm-app-go/dto/input
-    ErrorMessage:
-        properties:
-            error:
-                type: string
-                x-go-name: Error
-        type: object
-        x-go-package: crm-app-go/docs
     RegisterLeadFlywayRequestBody:
         properties:
             additionalInfo1:
@@ -77,98 +69,8 @@ definitions:
                 x-go-name: Tag1
         type: object
         x-go-package: crm-app-go/dto/input
-    RegisterTransactionError400Model:
-        properties:
-            code:
-                format: int64
-                type: integer
-                x-go-name: Code
-                x-order: "0"
-            message:
-                type: string
-                x-go-name: Message
-                x-order: "2"
-            payload:
-                properties:
-                    error:
-                        items:
-                            type: string
-                        type: array
-                        x-go-name: Error
-                        x-order: "0"
-                type: object
-                x-go-name: Payload
-            success:
-                type: boolean
-                x-go-name: Success
-                x-order: "1"
-        type: object
-        x-go-package: crm-app-go/dto/output
-    RegisterTransactionError404Model:
-        properties:
-            code:
-                format: int64
-                type: integer
-                x-go-name: Code
-                x-order: "0"
-            message:
-                type: string
-                x-go-name: Message
-                x-order: "2"
-            payload:
-                properties:
-                    error:
-                        items:
-                            type: string
-                        type: array
-                        x-go-name: Error
-                        x-order: "0"
-                type: object
-                x-go-name: Payload
-            success:
-                type: boolean
-                x-go-name: Success
-                x-order: "1"
-        type: object
-        x-go-package: crm-app-go/dto/output
-    RegisterTransactionError500Model:
-        properties:
-            code:
-                format: int64
-                type: integer
-                x-go-name: Code
-                x-order: "0"
-            message:
-                type: string
-                x-go-name: Message
-                x-order: "2"
-            payload:
-                properties:
-                    error:
-                        items:
-                            type: string
-                        type: array
-                        x-go-name: Error
-                        x-order: "0"
-                type: object
-                x-go-name: Payload
-            success:
-                type: boolean
-                x-go-name: Success
-                x-order: "1"
-        type: object
-        x-go-package: crm-app-go/dto/output
     RegisterTransactionSuccessModel:
         properties:
-            code:
-                format: int64
-                type: integer
-                x-go-name: Code
-                x-order: "0"
-            message:
-                type: string
-                x-go-name: Message
-                x-order: "2"
             payload:
                 properties:
                     message:
@@ -177,104 +79,10 @@ definitions:
                         x-order: "0"
                 type: object
                 x-go-name: Payload
-            success:
-                type: boolean
-                x-go-name: Success
-                x-order: "1"
-        type: object
-        x-go-package: crm-app-go/dto/output
-    RegisterUserError400Model:
-        properties:
-            code:
-                format: int64
-                type: integer
-                x-go-name: Code
-                x-order: "0"
-            message:
-                type: string
-                x-go-name: Message
-                x-order: "2"
-            payload:
-                properties:
-                    error:
-                        items:
-                            type: string
-                        type: array
-                        x-go-name: Error
-                        x-order: "0"
-                type: object
-                x-go-name: Payload
-            success:
-                type: boolean
-                x-go-name: Success
-                x-order: "1"
-        type: object
-        x-go-package: crm-app-go/dto/output
-    RegisterUserError404Model:
-        properties:
-            code:
-                format: int64
-                type: integer
-                x-go-name: Code
-                x-order: "0"
-            message:
-                type: string
-                x-go-name: Message
-                x-order: "2"
-            payload:
-                properties:
-                    error:
-                        items:
-                            type: string
-                        type: array
-                        x-go-name: Error
-                        x-order: "0"
-                type: object
-                x-go-name: Payload
-            success:
-                type: boolean
-                x-go-name: Success
-                x-order: "1"
-        type: object
-        x-go-package: crm-app-go/dto/output
-    RegisterUserError500Model:
-        properties:
-            code:
-                format: int64
-                type: integer
-                x-go-name: Code
-                x-order: "0"
-            message:
-                type: string
-                x-go-name: Message
-                x-order: "2"
-            payload:
-                properties:
-                    error:
-                        items:
-                            type: string
-                        type: array
-                        x-go-name: Error
-                        x-order: "0"
-                type: object
-                x-go-name: Payload
-            success:
-                type: boolean
-                x-go-name: Success
-                x-order: "1"
         type: object
         x-go-package: crm-app-go/dto/output
     RegisterUserSuccessModel:
         properties:
-            code:
-                format: int64
-                type: integer
-                x-go-name: Code
-                x-order: "0"
-            message:
-                type: string
-                x-go-name: Message
-                x-order: "2"
             payload:
                 properties:
                     accountId:
@@ -287,10 +95,6 @@ definitions:
                         x-order: "0"
                 type: object
                 x-go-name: Payload
-            success:
-                type: boolean
-                x-go-name: Success
-                x-order: "1"
         type: object
         x-go-package: crm-app-go/dto/output
 host: localhost:3002
@@ -319,11 +123,11 @@ paths:
                 "200":
                     $ref: '#/responses/registerTransactionResponseStatus200'
                 "400":
-                    $ref: '#/responses/registerTransactionResponseStatus400'
+                    $ref: '#/responses/error400'
                 "404":
-                    $ref: '#/responses/registerTransactionResponseStatus404'
+                    $ref: '#/responses/error404'
                 "500":
-                    $ref: '#/responses/registerTransactionResponseStatus500'
+                    $ref: '#/responses/error500'
             tags:
                 - Flyway
     /api/v1/flyway/register-user:
@@ -340,11 +144,11 @@ paths:
                 "200":
                     $ref: '#/responses/registerLeadResponseStatus200'
                 "400":
-                    $ref: '#/responses/registerLeadResponseStatus400'
+                    $ref: '#/responses/error400'
                 "404":
-                    $ref: '#/responses/registerLeadResponseStatus404'
+                    $ref: '#/responses/error404'
                 "500":
-                    $ref: '#/responses/registerLeadResponseStatus500'
+                    $ref: '#/responses/error500'
             tags:
                 - Flyway
 produces:
@@ -353,48 +157,54 @@ produces:
 responses:
     error400:
         description: Bad Request error Response | Validation error message or invalid json
-        schema:
-            $ref: '#/definitions/ErrorMessage'
+        headers:
+            code:
+                format: int64
+                type: integer
+            message:
+                type: string
     error404:
         description: Not Found error Response | Page not found or record not found
+        headers:
+            code:
+                format: int64
+                type: integer
+            message:
+                type: string
+            payload: {}
         schema:
-            $ref: '#/definitions/ErrorMessage'
+            properties:
+                error:
+                    items:
+                        type: string
+                    type: array
+                    x-go-name: Error
+            type: object
     error500:
         description: Internal server error Response | server is down or db constraint errors
+        headers:
+            code:
+                format: int64
+                type: integer
+            message:
+                type: string
+            payload: {}
         schema:
-            $ref: '#/definitions/ErrorMessage'
+            properties:
+                error:
+                    items:
+                        type: string
+                    type: array
+                    x-go-name: Error
+            type: object
     registerLeadResponseStatus200:
         description: Flyway Response With Status Code 200
         schema:
             $ref: '#/definitions/RegisterUserSuccessModel'
-    registerLeadResponseStatus400:
-        description: Flyway Response With Status Code 400
-        schema:
-            $ref: '#/definitions/RegisterUserError400Model'
-    registerLeadResponseStatus404:
-        description: Flyway Response With Status Code 404
-        schema:
-            $ref: '#/definitions/RegisterUserError404Model'
-    registerLeadResponseStatus500:
-        description: Flyway Response With Status Code 500
-        schema:
-            $ref: '#/definitions/RegisterUserError500Model'
     registerTransactionResponseStatus200:
         description: Flyway Response With Status Code 200
         schema:
             $ref: '#/definitions/RegisterTransactionSuccessModel'
-    registerTransactionResponseStatus400:
-        description: Flyway Response With Status Code 400
-        schema:
-            $ref: '#/definitions/RegisterTransactionError400Model'
-    registerTransactionResponseStatus404:
-        description: Flyway Response With Status Code 404
-        schema:
-            $ref: '#/definitions/RegisterTransactionError404Model'
-    registerTransactionResponseStatus500:
-        description: Flyway Response With Status Code 500
-        schema:
-            $ref: '#/definitions/RegisterTransactionError500Model'
 schemes:
     - http
     - https

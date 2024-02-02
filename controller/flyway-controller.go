@@ -15,6 +15,11 @@ type IFlywayController interface {
 	CrateTransactionInCrm(w http.ResponseWriter, r *http.Request)
 }
 
+type ApiError struct {
+    Field string
+    Msg   string
+}
+
 type flywayController struct{}
 
 var (
@@ -28,40 +33,48 @@ func NewFlywayController(service service.IFlywayService) IFlywayController {
 
 func (flywayController *flywayController) RegisterLeadInCrm(w http.ResponseWriter, r *http.Request) {
 	var newRegister RegisterLeadFlywayRequestBody
+	var errorsMessage []string
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&newRegister); err != nil {
-		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
+		errorsMessage = append(errorsMessage, fmt.Sprintf("%v", "Invalid request payload"))
+		respondWithArrayError(w, http.StatusBadRequest, errorsMessage)
 		return
 	}
 	defer r.Body.Close()
-
-	// Create a new validator instance
     instance := validator.New()
-
-    // Validate the User struct
     validate:= instance.Struct(newRegister)
     if validate != nil {
-        // Validation failed, handle the error
         errors := validate.(validator.ValidationErrors)
 		for _, validationError := range errors {
-            fmt.Println(validationError.Field(), validationError.Error())
+			errorsMessage = append(errorsMessage, fmt.Sprintf("field '%s' failed validation: '%s'", validationError.Field(), validationError.Tag()))
         }
-        respondWithError(w, http.StatusBadRequest, "")
+        respondWithArrayError(w, http.StatusBadRequest, errorsMessage)
         return
     }
-
 	res := flywayService.RegisterLeadInCrm(&newRegister)
 	respondWithJSON(w, http.StatusOK, res)
 }
 
 func (flywayController *flywayController) CrateTransactionInCrm(w http.ResponseWriter, r *http.Request) {
 	var newTransaction CrateTransactionFlyway
+	var errorsMessage []string
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&newTransaction); err != nil {
-		respondWithError(w, http.StatusBadRequest, "Invalid request payload")
+		errorsMessage = append(errorsMessage, fmt.Sprintf("%v", "Invalid request payload"))
+		respondWithArrayError(w, http.StatusBadRequest, errorsMessage)
 		return
 	}
 	defer r.Body.Close()
+	instance := validator.New()
+    validate:= instance.Struct(newTransaction)
+    if validate != nil {
+        errors := validate.(validator.ValidationErrors)
+		for _, validationError := range errors {
+			errorsMessage = append(errorsMessage, fmt.Sprintf("field '%s' failed validation: '%s'", validationError.Field(), validationError.Tag()))
+        }
+        respondWithArrayError(w, http.StatusBadRequest, errorsMessage)
+        return
+    }
 	res := flywayService.CrateTransactionInCrm(&newTransaction)
 	respondWithJSON(w, http.StatusOK, res)
 }
